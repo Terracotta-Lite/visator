@@ -1,7 +1,5 @@
 #!/bin/bash
 
-cat /usr/share/vis/themes/solarized.lua
-
 cat $1 | egrep -v '^ {0,}"' | grep 'hi ' | egrep -v '^ ' | grep -n -o -e "hi \w*\w " -e "\w*guifg=#\w*" -e "\w*guibg=#\w*" > "${1%.vim}.lua"
 
 line=$(tail -1 "${1%.vim}.lua" | cut -d : -f 1)
@@ -58,6 +56,7 @@ do
 		then
 			color+="back:${bg},"
 		fi
-		echo $string = \'$color\'
+		echo $string = \'$color\' | tee -a "${1%.vim}.lua.tmp"
 	fi
 done
+cat /usr/share/vis/themes/default-256.lua "${1%.vim}.lua.tmp" > "${1%.vim}.lua"
